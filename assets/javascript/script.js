@@ -5,15 +5,47 @@ const Employee = require("./Employee");
 
 const inquirer = require('inquirer');
 
-const main = document.querySelector("main");
+//const main = document.querySelector("main");
 
+let html = `<!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta http-equiv="X-UA-Compatible" content="IE=edge">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <link rel="stylesheet" href="./assets/css/reset.css">
+                <link rel="stylesheet" href="./assets/css/style.css">
+                <title>Team Profile</title>
+            </head>
+                <body>
+                    <header>
+                        <h1>My Team Manager</h1>
+                    </header>
+
+                    <main>
+                        <div class="card">
+                            <h2 class="member-name">Member Name</h2>
+                            <div class="card-info">
+                                <p class="id">ID: </p>
+                                <hr>
+                                <p class="email">Email: </p>
+                                <hr>
+                                <p class="employee-info">Engineer</p>
+                            </div>
+                        </div>
+                    </main>
+
+                    <script src="./assets/javascript/script.js"></script>
+                </body>
+            </html>`
 
 let manager;
+let userChoice;
 
-function init() {
+async function init() {
     console.log('Welcome to Team Manager V1.0.0 \n');
 
-    inquirer
+    await inquirer
     .prompt([{
         type: 'input',
         message: 'What is manager\'s name?',
@@ -36,8 +68,34 @@ function init() {
     }])
     .then((data) => {
         manager = new Manager(data.name, data.id, data.email, data.office);
-        appendToHTML(manager);
+        //appendToHTML(manager);
     });
+    
+    do{
+        await inquirer
+        .prompt({
+            type: 'list',
+            message: 'What would you like to do next?',
+            name:'choice',
+            choices: [
+                'Add an Engineer',
+                'Add an Intern',
+                'Finish Application'
+            ]
+        })
+        .then((data) => {
+            userChoice = data.choice;
+            if(data.choice === 'Add an Engineer'){
+                addEngineer();
+            }
+
+            if(data.choice === 'Add an Intern'){
+                addIntern();
+            }
+        })
+    }while(userChoice !== 'Finish Application');
+
+    return;
 }
 
 function appendToHTML(employee){
@@ -85,6 +143,66 @@ function appendToHTML(employee){
 
     // Appending to main section on HTML
     main.appendChild(divCard);
+
 }
 
+async function addEngineer(){
+    inquirer
+    .prompt([
+        {
+            type: 'input',
+            message: 'What is engineer\'s name?',
+            name: 'name'
+        },
+        {
+            type: 'input',
+            message: 'What is the ID?',
+            name: 'id'
+        },
+        {
+            tpye: 'input',
+            message: 'What is engineer\'s email?',
+            name: 'email'
+        },
+        {
+            type: 'input',
+            message: 'What is engineer\'s Github?',
+            name: 'github'
+        }
+    ])
+    .then((data) => {
+        let engineer = new Engineer(data.name, data.id, data.email, data.github);
+        console.log(engineer);
+    })
+}
+
+async function addIntern(){
+    inquirer
+    .prompt([
+        {
+            type: 'input',
+            message: 'What is intern\'s name?',
+            name: 'name'
+        },
+        {
+            type: 'input',
+            message: 'What is the ID?',
+            name: 'id'
+        },
+        {
+            tpye: 'input',
+            message: 'What is intern\'s email?',
+            name: 'email'
+        },
+        {
+            type: 'input',
+            message: 'What is intern\'s school?',
+            name: 'school'
+        }
+    ])
+    .then((data) => {
+        let intern = new Engineer(data.name, data.id, data.email, data.school);
+        console.log(intern);
+    })
+}
 init();

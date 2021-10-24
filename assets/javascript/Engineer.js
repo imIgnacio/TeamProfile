@@ -1,9 +1,14 @@
+const Employee = require('./Employee');
+
 class Engineer {
-    constructor(name, ID, email, github){
-        this.name = name;
-        this.id = ID;
-        this.email = email;
+    constructor(name, id, email, github){
+
+        super(name, id, email);
         this.github = github;
+    }
+
+    getRole() {
+        return 'Engineer';
     }
 }
 

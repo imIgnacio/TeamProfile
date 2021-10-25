@@ -2,42 +2,10 @@ const Manager = require("./lib/Manager");
 const Engineer = require("./lib/Engineer");
 const Intern = require("./lib/Intern");
 const Employee = require("./lib/Employee");
+const render = require('./src/renderHTML');
 
 const inquirer = require('inquirer');
-
-//const main = document.querySelector("main");
-
-let html = `<!DOCTYPE html>
-            <html lang="en">
-            <head>
-                <meta charset="UTF-8">
-                <meta http-equiv="X-UA-Compatible" content="IE=edge">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <link rel="stylesheet" href="./assets/css/reset.css">
-                <link rel="stylesheet" href="./assets/css/style.css">
-                <title>Team Profile</title>
-            </head>
-                <body>
-                    <header>
-                        <h1>My Team Manager</h1>
-                    </header>
-
-                    <main>
-                        <div class="card">
-                            <h2 class="member-name">Member Name</h2>
-                            <div class="card-info">
-                                <p class="id">ID: </p>
-                                <hr>
-                                <p class="email">Email: </p>
-                                <hr>
-                                <p class="employee-info">Engineer</p>
-                            </div>
-                        </div>
-                    </main>
-
-                    <script src="./assets/javascript/script.js"></script>
-                </body>
-            </html>`
+const fs = require('fs');
 
 let manager;
 let userChoice;
@@ -71,9 +39,10 @@ async function init() {
         manager = new Manager(data.name, data.id, data.email, data.office);
         membersArray.push(manager);
         addTeamMembers();
-        //appendToHTML(manager);
     });
 }
+
+// Function to add engineers, interns or finish the app
 function addTeamMembers() {
     inquirer
     .prompt({
@@ -87,8 +56,7 @@ function addTeamMembers() {
         ]
     })
     .then((data) => {
-
-        switch (data.choice) {
+        switch(data.choice) {
             case 'Add an Engineer':
                 addEngineer();
                 break;
@@ -102,10 +70,12 @@ function addTeamMembers() {
     })
 }
 
+// Create HTML file
 function renderHTML() {
-    console.log(membersArray);
+    const htmlCreated = render(membersArray);
 }
 
+// *DO NOT TRUST*
 function appendToHTML(employee){
     // Create all html elements needed
     const divCard = document.createElement('<div>');

@@ -1,4 +1,8 @@
-let htmlWritten = `<!DOCTYPE html>
+const fs = require('fs');
+
+let cards;
+
+let htmlWritten = (cards) =>  `<!DOCTYPE html>
             <html lang="en">
             <head>
                 <meta charset="UTF-8">
@@ -14,16 +18,7 @@ let htmlWritten = `<!DOCTYPE html>
                     </header>
 
                     <main>
-                        <div class="card">
-                            <h2 class="member-name">Member Name</h2>
-                            <div class="card-info">
-                                <p class="id">ID: </p>
-                                <hr>
-                                <p class="email">Email: </p>
-                                <hr>
-                                <p class="employee-info">Engineer</p>
-                            </div>
-                        </div>
+                        ${cards}
                     </main>
 
                     <script src="./assets/javascript/script.js"></script>
@@ -33,8 +28,15 @@ let htmlWritten = `<!DOCTYPE html>
 let manager;
 let engineerArray;
 let internArray;
+let employeesFiltered = [];
+let cardsArray = [];
 
-// Separates the whole array into different ones based on position
+function appendToHTML(array) {
+    cards = array.join('');
+    fs.writeFile('index.html', htmlWritten);
+}
+
+// Filter and organise employees
 function filterEmployees(array) {
     // Filter array to have Employees filtered
     manager = array[0];
@@ -44,12 +46,60 @@ function filterEmployees(array) {
     internArray = array.filter((value) => {
         return value.getRole() === 'Intern';
     })
+
+    employeesFiltered.push(manager);
+    Array.prototype.push.apply(employeesFiltered, engineerArray);
+    Array.prototype.push.apply(employeesFiltered, internArray);
+
+    createCards(employeesFiltered);
 }
 
-// Create cards for html file
-function createCards(employee) {
+// Create cards for html file from Employess already filtered
+function createCards(array) {
+    array.forEach((data, index) => {
+        if(data.getRole() === 'Manager'){
 
+            let cardManager = `<div class="card">
+                <h2 class="member-name">${data.getName()}</h2>
+                <div class="card-info">
+                    <p class="id">ID: ${data.getId()}</p>
+                    <hr>
+                    <p class="email">Email: ${data.getEmail()}</p>
+                    <hr>
+                    <p class="employee-info">Office Number: ${data.getOfficeNumber()}</p>
+                </div>
+            </div>`
+            cardsArray.push(cardManager);
+        }else if(data.getRole() === 'Engineer'){
+
+            let cardEngineer = `<div class="card">
+                    <h2 class="member-name">${data.getName()}</h2>
+                    <div class="card-info">
+                        <p class="id">ID: ${data.getId()}</p>
+                        <hr>
+                        <p class="email">Email: ${data.getEmail()}</p>
+                        <hr>
+                        <p class="employee-info">Github: ${data.getGithub()}</p>
+                    </div>
+                </div>`
+                cardsArray.push(cardEngineer);
+        }else{
+
+            let cardIntern = `<div class="card">
+                    <h2 class="member-name">${data.getName()}</h2>
+                    <div class="card-info">
+                        <p class="id">ID: ${data.getId()}</p>
+                        <hr>
+                        <p class="email">Email: ${data.getEmail()}</p>
+                        <hr>
+                        <p class="employee-info">School: ${data.getSchool()}</p>
+                    </div>
+                </div>`
+                cardsArray.push(cardIntern);
+        }
+    })
+    appendToHTML(cardsArray);
 }
 
 
-module.exports = generateHTML;
+module.exports = filterEmployees;

@@ -8,8 +8,8 @@ let htmlWritten = (cards) =>  `<!DOCTYPE html>
                 <meta charset="UTF-8">
                 <meta http-equiv="X-UA-Compatible" content="IE=edge">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <link rel="stylesheet" href="./assets/css/reset.css">
-                <link rel="stylesheet" href="./assets/css/style.css">
+                <link rel="stylesheet" href="./css/reset.css">
+                <link rel="stylesheet" href="./css/style.css">
                 <title>Team Profile</title>
             </head>
                 <body>
@@ -31,9 +31,12 @@ let internArray;
 let employeesFiltered = [];
 let cardsArray = [];
 
-function appendToHTML(array) {
+// Function to write HTML file so It can be deployed
+function writeHTML(array) {
     cards = array.join('');
-    fs.writeFile('index.html', htmlWritten);
+    fs.writeFile('./dist/index.html',htmlWritten(cards), (err) =>
+        err ? console.error(err) : console.log('Readme created successfully!')
+    )
 }
 
 // Filter and organise employees
@@ -100,6 +103,5 @@ function createCards(array) {
     })
     appendToHTML(cardsArray);
 }
-
 
 module.exports = filterEmployees;

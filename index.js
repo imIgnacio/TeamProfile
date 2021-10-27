@@ -72,8 +72,7 @@ function addTeamMembers() {
 
 // Get HTML file ready to be written using fs
 function renderHTML() {
-    const htmlCreated = render(membersArray);
-    fs.writeFile('index.html',htmlCreated);
+    const htmlCreated =  render(membersArray);
 }
 
 function addEngineer(){

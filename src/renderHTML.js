@@ -101,7 +101,7 @@ function createCards(array) {
                 cardsArray.push(cardIntern);
         }
     })
-    appendToHTML(cardsArray);
+    writeHTML(cardsArray);
 }
 
 module.exports = filterEmployees;
